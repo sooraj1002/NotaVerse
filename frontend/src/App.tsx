@@ -1,11 +1,12 @@
-import "./App.css";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
 
-function App() {
+export default function App() {
   return (
     <>
-      <h1>HIIi</h1>
+      <Header />
+      <div className="h-[60rem]"></div>
+      <Footer />
     </>
   );
 }
-
-export default App;
