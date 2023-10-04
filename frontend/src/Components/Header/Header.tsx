@@ -31,7 +31,10 @@ const Navbar: React.FC = () => {
           />
         </div>
         <ul className="flex items-center space-x-6">
-          <li className="font-semibold text-gray-700">My Notes</li>
+          <li className="font-semibold text-gray-700"></li>
+          <li>
+            <a href="/mynotes">My Notes</a>
+          </li>
           <li className="group relative">
             <button className="flex items-center space-x-1 text-gray-700 group-hover:text-blue-500">
               <span>Shady WRLD</span>
