@@ -2,8 +2,23 @@ import { Link } from "react-router-dom";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import Card from "../../Components/Card/Card";
 import notes from "../../../data/notes";
+import { useEffect } from "react";
+import axios from "axios";
 
 const MyNotes = () => {
+  const fetchNotes = async () => {
+    try {
+      const response = await axios.get("/api/notes");
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
   return (
     <PageTemplate title="Welcome Back Sooraj ">
       <Link to="create">
@@ -12,7 +27,7 @@ const MyNotes = () => {
         </button>
       </Link>
       {notes.map((note) => (
-        <Card title={note.title} key={note._id} />
+        <Card note={note} key={note._id} />
       ))}
     </PageTemplate>
   );
