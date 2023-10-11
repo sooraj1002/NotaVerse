@@ -1,14 +1,24 @@
 import { Link } from "react-router-dom";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import Card from "../../Components/Card/Card";
-import notes from "../../../data/notes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
+interface Note {
+  _id: string;
+  title: string;
+  content: string;
+  category: string;
+}
+
 const MyNotes = () => {
+  const [notes, setNotes] = useState<Note[]>([]);
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("/api/notes");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_LINK}/api/notes`
+      );
+      setNotes(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching notes:", error);

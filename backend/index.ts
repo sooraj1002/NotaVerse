@@ -1,8 +1,10 @@
 import express from "express";
 import notes from "./data/notes";
 import dotenv from "dotenv";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 dotenv.config();
 
 app.get("/", (req, res) => {
