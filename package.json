@@ -5,9 +5,9 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "back": "nodemon backend/index.ts",
-    "front": "cd frontend && npm run dev",
-    "start:dev": "concurrently \"npm run back\" \"npm run front\""
+    "backend-nest": "cd backend && npm run start:dev",
+    "frontend": "cd frontend && npm run dev",
+    "start:dev": "concurrently \"npm run frontend\"  \"npm run backend-nest\" "
   },
   "author": "Sooraj",
   "license": "ISC",
