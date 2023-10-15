@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { NotesService } from './notes/notes.service';
 import { NotesController } from './notes/notes.controller';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
+import { NotesModule } from './notes/notes.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '../.env',
       isGlobal: true,
     }),
+    UserModule,
+    NotesModule,
+    AuthModule,
   ],
   controllers: [AppController, NotesController],
   providers: [AppService, NotesService],
