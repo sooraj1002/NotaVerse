@@ -14,7 +14,7 @@ const LandingPage = () => {
             <a href="/login">Login</a>
           </button>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
-            <a href="/signup">Sinup</a>
+            <a href="/signup">Signup</a>
           </button>
         </div>
       </div>
