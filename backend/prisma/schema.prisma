@@ -22,6 +22,9 @@ model User {
   firstName String
   lastName  String
   picture   String? @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
+  notes     Note[]
+
+  @@map("users")
 }
 
 model Note {
@@ -29,7 +32,12 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
-  description String
-  link        String
+  title    String
+  content  String
+  category String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("notes")
 }
