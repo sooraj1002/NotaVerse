@@ -1,13 +1,31 @@
 interface InputBoxProps {
   text: string;
+  value: string;
+  handleChange: (value: string) => void;
 }
 
-const InputBox: React.FC<InputBoxProps> = ({ text }) => {
+const InputBox: React.FC<InputBoxProps> = ({ text, value, handleChange }) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(event.target.value);
+  };
+
+  let type = text;
+
+  if (text === "password" || text === "Confirm Password") {
+    type = "password";
+  }
+
+  if (text == "email") {
+    type == "email";
+  }
+
   return (
     <>
       <div className="relative z-0 w-full mb-6 group">
         <input
-          type="text"
+          type={type}
+          value={value}
+          onChange={handleInputChange}
           className="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 border-gray-300    focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           placeholder=" "
           required
