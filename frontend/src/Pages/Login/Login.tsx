@@ -1,11 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputBox from "../../Components/InputBox/InputBox";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 interface UserData {
   email: string;
   password: string;
+}
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+  exp: number;
 }
 
 const Login = () => {
@@ -14,16 +21,68 @@ const Login = () => {
     password: "",
   });
 
+  const token = localStorage.getItem("accessToken");
+  useEffect(() => {
+    if (token) {
+      try {
+        const decoded: JwtPayload = jwt_decode(token);
+        if (decoded.exp * 1000 > Date.now()) {
+          navigate("/mynotes");
+        }
+      } catch (error) {
+        console.log("token has expired");
+      }
+    }
+  }, [token]);
+
+  const navigate = useNavigate();
+
   const handleChange = (name: string, value: string) => {
     setUserData((prevUserData) => ({
       ...prevUserData,
       [name]: value,
     }));
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(userData);
+
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(userData.email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    const backendURL = import.meta.env.VITE_BACKEND_LINK;
+
+    try {
+      const response = await fetch(`${backendURL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const responseData = await response.json();
+      const accessToken = responseData.access_token;
+
+      if (response.ok) {
+        localStorage.setItem("accessToken", accessToken);
+        navigate("/mynotes");
+      } else {
+        alert("Please Enter Correct Email and Password");
+      }
+    } catch (error) {
+      console.error("Error registering:", error);
+    }
+  };
+
   return (
     <>
       <PageTemplate title="LOGIN ">
-        <form className="text-black">
+        <form className="text-black" onSubmit={handleSubmit}>
           <InputBox
             text="Email"
             value={userData.email}

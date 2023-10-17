@@ -16,7 +16,7 @@ const MyNotes = () => {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_LINK}/api/notes`
+        `${import.meta.env.VITE_BACKEND_LINK}/notes`
       );
       setNotes(response.data);
       console.log(response.data);

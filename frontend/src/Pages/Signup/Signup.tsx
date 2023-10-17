@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import InputBox from "../../Components/InputBox/InputBox";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 interface UserData {
   firstName: string;
@@ -9,6 +10,12 @@ interface UserData {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+  exp: number;
 }
 
 const Signup = () => {
@@ -19,6 +26,20 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const token = localStorage.getItem("accessToken");
+  useEffect(() => {
+    if (token) {
+      try {
+        const decoded: JwtPayload = jwt_decode(token);
+        if (decoded.exp * 1000 > Date.now()) {
+          navigate("/mynotes");
+        }
+      } catch (error) {
+        console.log("token has expired");
+      }
+    }
+  }, [token]);
 
   const navigate = useNavigate();
 
