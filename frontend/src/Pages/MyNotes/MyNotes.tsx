@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAuth } from "../../Context/AuthContext";
 
 interface Note {
-  _id: string;
+  id: string;
   title: string;
   content: string;
   category: string;
@@ -50,7 +50,7 @@ const MyNotes = () => {
         </button>
       </Link>
       {notes.map((note) => (
-        <Card note={note} key={note._id} />
+        <Card note={note} key={note.id} />
       ))}
     </PageTemplate>
   );

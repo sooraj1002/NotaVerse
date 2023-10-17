@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../Button/Button";
 
 interface Note {
-  _id: string;
+  id: string;
   title: string;
   content: string;
   category: string;
@@ -32,7 +32,7 @@ const Card: React.FC<CardProps> = ({ note }) => {
           {note.title}
         </span>
         <div>
-          <a href={`/note/${note._id}`}>
+          <a href={`/note/${note.id}`}>
             <Button
               title="Edit"
               customClass="px-2 py-1 mx-1 hover:bg-blue-700"
@@ -41,7 +41,7 @@ const Card: React.FC<CardProps> = ({ note }) => {
           <Button
             title="Delete"
             customClass="px-2 py-1 mx-1 bg-red-500 hover:bg-red-700"
-            onClick={() => handleNoteDelete(note._id)}
+            onClick={() => handleNoteDelete(note.id)}
           />
         </div>
       </div>

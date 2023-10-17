@@ -1,12 +1,4 @@
-export interface Note {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  userId: number;
-}
-
-const notes: Note[] = [
+module.exports = [
   {
     id: '1',
     title: 'Day 1 of college',
@@ -38,5 +30,3 @@ const notes: Note[] = [
     userId: 41,
   },
 ];
-
-export default notes;

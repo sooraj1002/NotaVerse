@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "seed": "cd backend && npm run seed:dev",
     "db:dev:rm": "docker compose rm postgres -s -f -v",
     "db:dev:up": "docker compose up -d",
     "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && sleep 1 && cd backend && npm run prisma:dev:deploy",

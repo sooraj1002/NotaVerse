@@ -8,6 +8,6 @@ export class NotesService {
   }
 
   singleNote(id: string) {
-    return notes.find((note) => note._id === id);
+    return notes.find((note) => note.id === id);
   }
 }

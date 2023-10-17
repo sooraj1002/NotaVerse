@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "seed:dev": "cd prisma && node removeData.js && node seed.js",
     "prisma:dev:deploy": "prisma migrate deploy",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
