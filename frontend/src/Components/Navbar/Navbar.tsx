@@ -3,11 +3,13 @@ import { useAuth } from "../../Context/AuthContext";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { user, logout } = useAuth();
+  const { user, expired, logout } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  console.log(expired());
 
   return (
     <nav className="flex justify-between px-20 py-10 items-center bg-blue-400">
@@ -15,7 +17,7 @@ const Navbar: React.FC = () => {
         <h1 className="text-xl text-gray-800 font-bold">NotaVerse</h1>
       </a>
       <div className="flex items-center">
-        {user ? (
+        {!expired() ? (
           <>
             <div className="flex items-center border-black">
               <svg

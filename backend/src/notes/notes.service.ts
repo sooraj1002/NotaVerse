@@ -1,13 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import notes from 'data/notes';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { updateDto } from './dto';
 
 @Injectable()
 export class NotesService {
-  allNotes() {
+  constructor(private prisma: PrismaService) {}
+
+  async allNotes() {
+    const notes = this.prisma.note.findMany();
     return notes;
   }
 
-  singleNote(id: string) {
-    return notes.find((note) => note.id === id);
+  async singleNote(id: string) {
+    const note = this.prisma.note.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    return note;
+  }
+
+  async editNote(id: string, updatedData: updateDto) {
+    const note = this.prisma.note.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: updatedData,
+    });
+    return note;
+  }
+
+  async deleteNote(id: string) {
+    const deletedNote = await this.prisma.note.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    return deletedNote;
   }
 }

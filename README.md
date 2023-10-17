@@ -13,3 +13,9 @@ To start using the Notaverse app, follow these simple steps:
    ```bash
    git clone https://github.com/your-username/notaverse.git
    ```
+
+to start restart the complete docker environment, run `npm run db:dev:restart`
+
+to seed data, run `npm run seed` in the root directory
+
+finally, to start the frontend and backend environments, run the command `npm run start:dev`
