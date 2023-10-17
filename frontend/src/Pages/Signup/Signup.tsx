@@ -32,6 +32,7 @@ const Signup = () => {
     if (token) {
       try {
         const decoded: JwtPayload = jwt_decode(token);
+        console.log(decoded);
         if (decoded.exp * 1000 > Date.now()) {
           navigate("/mynotes");
         }
@@ -39,7 +40,7 @@ const Signup = () => {
         console.log("token has expired");
       }
     }
-  }, [token]);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -70,14 +71,17 @@ const Signup = () => {
     try {
       const response = await fetch(`${backendURL}/auth/signup`, {
         method: "POST",
-        headers: {
+        Navbars: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
-      console.log(response);
+
+      const responseData = await response.json();
+      const accessToken = responseData.access_token;
+
       if (response.ok) {
-        alert("Registration successful!");
+        localStorage.setItem("accessToken", accessToken);
         navigate("/mynotes");
       } else {
         alert("Email Already Exists, use another Email Id");

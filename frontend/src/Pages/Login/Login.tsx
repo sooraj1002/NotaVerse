@@ -59,7 +59,7 @@ const Login = () => {
     try {
       const response = await fetch(`${backendURL}/auth/login`, {
         method: "POST",
-        headers: {
+        Navbars: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),

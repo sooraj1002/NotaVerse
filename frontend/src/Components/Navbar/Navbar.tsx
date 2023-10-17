@@ -1,6 +1,10 @@
 import React from "react";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  name: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ name }) => {
   return (
     <nav className="flex justify-between px-20 py-10 items-center bg-blue-400">
       <a href="/">
@@ -37,7 +41,7 @@ const Navbar: React.FC = () => {
           </li>
           <li className="group relative">
             <button className="flex items-center space-x-1 text-gray-700 group-hover:text-blue-500">
-              <span>Shady WRLD</span>
+              <span>{name}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"

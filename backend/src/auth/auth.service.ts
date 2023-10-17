@@ -26,7 +26,7 @@ export class AuthService {
         },
       });
 
-      return this.signToken(user.id, user.email);
+      return this.signToken(user.id, user.email, user.firstName);
     } catch (error) {
       if (
         error instanceof PrismaClientKnownRequestError &&
@@ -55,16 +55,18 @@ export class AuthService {
       throw new ForbiddenException('Incorrect Password');
     }
 
-    return this.signToken(user.id, user.email);
+    return this.signToken(user.id, user.email, user.firstName);
   }
 
   async signToken(
     userId: number,
     email: string,
+    name: string,
   ): Promise<{ access_token: string }> {
     const payload = {
       sub: userId,
       email: email,
+      name: name,
     };
 
     const token = await this.jwt.signAsync(payload, {
