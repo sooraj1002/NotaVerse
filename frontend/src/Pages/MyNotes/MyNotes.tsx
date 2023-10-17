@@ -3,7 +3,7 @@ import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import Card from "../../Components/Card/Card";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import { useAuth } from "../../Context/AuthContext";
 
 interface Note {
   _id: string;
@@ -12,16 +12,8 @@ interface Note {
   category: string;
 }
 
-interface JwtPayload {
-  sub: number;
-  email: string;
-  exp: number;
-  name: string;
-}
-
 const MyNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [name, setName] = useState<String>("");
 
   const fetchNotes = async () => {
     try {
@@ -35,36 +27,21 @@ const MyNotes = () => {
     }
   };
 
-  const token = localStorage.getItem("accessToken");
   const navigate = useNavigate();
-
-  const checkToken = async () => {
-    if (token) {
-      try {
-        const decoded: JwtPayload = await jwt_decode(token);
-        // console.log(decoded);
-        if (decoded.exp * 1000 > Date.now()) {
-          setName(decoded.name);
-          console.log(name);
-          return true;
-        } else {
-          return false;
-        }
-      } catch (error) {
-        console.log("token has expired");
-      }
-    }
-  };
+  const { user, expired } = useAuth();
 
   useEffect(() => {
-    fetchNotes();
-    if (!checkToken()) {
-      alert("Session has expired, login again");
+    console.log(expired());
+    console.log(user);
+
+    if (expired() || !user) {
       navigate("/login");
     }
+
+    fetchNotes();
   }, []);
 
-  const title = `Welcome back ${name}`;
+  const title = `Welcome back Sooraj`;
   return (
     <PageTemplate title={title}>
       <Link to="create">

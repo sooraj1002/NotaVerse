@@ -2,17 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import InputBox from "../../Components/InputBox/InputBox";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
+import { useAuth } from "../../Context/AuthContext";
 
 interface UserData {
   email: string;
   password: string;
-}
-
-interface JwtPayload {
-  sub: number;
-  email: string;
-  exp: number;
 }
 
 const Login = () => {
@@ -21,21 +15,14 @@ const Login = () => {
     password: "",
   });
 
-  const token = localStorage.getItem("accessToken");
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded: JwtPayload = jwt_decode(token);
-        if (decoded.exp * 1000 > Date.now()) {
-          navigate("/mynotes");
-        }
-      } catch (error) {
-        console.log("token has expired");
-      }
-    }
-  }, [token]);
-
   const navigate = useNavigate();
+  const { user, login, expired } = useAuth();
+
+  useEffect(() => {
+    if (user && !expired()) {
+      navigate("/mynotes");
+    }
+  }, [user, expired]);
 
   const handleChange = (name: string, value: string) => {
     setUserData((prevUserData) => ({
@@ -55,11 +42,10 @@ const Login = () => {
     }
 
     const backendURL = import.meta.env.VITE_BACKEND_LINK;
-
     try {
       const response = await fetch(`${backendURL}/auth/login`, {
         method: "POST",
-        Navbars: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
@@ -69,7 +55,7 @@ const Login = () => {
       const accessToken = responseData.access_token;
 
       if (response.ok) {
-        localStorage.setItem("accessToken", accessToken);
+        login(accessToken);
         navigate("/mynotes");
       } else {
         alert("Please Enter Correct Email and Password");

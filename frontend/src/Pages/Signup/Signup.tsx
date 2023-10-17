@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputBox from "../../Components/InputBox/InputBox";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
+import { useAuth } from "../../Context/AuthContext";
 
 interface UserData {
   firstName: string;
@@ -10,12 +10,6 @@ interface UserData {
   email: string;
   password: string;
   confirmPassword: string;
-}
-
-interface JwtPayload {
-  sub: number;
-  email: string;
-  exp: number;
 }
 
 const Signup = () => {
@@ -27,22 +21,14 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const token = localStorage.getItem("accessToken");
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded: JwtPayload = jwt_decode(token);
-        console.log(decoded);
-        if (decoded.exp * 1000 > Date.now()) {
-          navigate("/mynotes");
-        }
-      } catch (error) {
-        console.log("token has expired");
-      }
-    }
-  }, []);
-
   const navigate = useNavigate();
+  const { user, login, expired } = useAuth();
+
+  useEffect(() => {
+    if (user && !expired()) {
+      navigate("/mynotes");
+    }
+  }, [user, expired]);
 
   const handleChange = (name: string, value: string) => {
     setUserData((prevUserData) => ({
@@ -71,7 +57,7 @@ const Signup = () => {
     try {
       const response = await fetch(`${backendURL}/auth/signup`, {
         method: "POST",
-        Navbars: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
@@ -81,7 +67,7 @@ const Signup = () => {
       const accessToken = responseData.access_token;
 
       if (response.ok) {
-        localStorage.setItem("accessToken", accessToken);
+        login(accessToken);
         navigate("/mynotes");
       } else {
         alert("Email Already Exists, use another Email Id");
