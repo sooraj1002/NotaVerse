@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputBox from "../../Components/InputBox/InputBox";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import { useState } from "react";
@@ -20,6 +20,8 @@ const Signup = () => {
     confirmPassword: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (name: string, value: string) => {
     setUserData((prevUserData) => ({
       ...prevUserData,
@@ -27,7 +29,7 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(userData);
 
@@ -40,6 +42,27 @@ const Signup = () => {
     if (userData.password !== userData.confirmPassword) {
       alert("Please enter the correct password in both fields");
       return false;
+    }
+
+    const backendURL = import.meta.env.VITE_BACKEND_LINK;
+
+    try {
+      const response = await fetch(`${backendURL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      console.log(response);
+      if (response.ok) {
+        alert("Registration successful!");
+        navigate("/mynotes");
+      } else {
+        alert("Email Already Exists, use another Email Id");
+      }
+    } catch (error) {
+      console.error("Error registering:", error);
     }
   };
 
