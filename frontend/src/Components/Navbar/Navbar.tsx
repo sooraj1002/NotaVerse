@@ -9,8 +9,6 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  console.log(expired());
-
   return (
     <nav className="flex justify-between px-20 py-10 items-center bg-blue-400">
       <a href="/">
@@ -51,7 +49,7 @@ const Navbar: React.FC = () => {
                   className="flex items-center space-x-1 text-gray-700 group-hover:text-blue-500"
                   onClick={toggleMenu}
                 >
-                  <span>{user.name}</span>
+                  <span>{user?.name}</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-5 w-5"

@@ -41,7 +41,7 @@ const MyNotes = () => {
     fetchNotes();
   }, []);
 
-  const title = `Welcome back Sooraj`;
+  const title = `Welcome back ${user?.name}`;
   return (
     <PageTemplate title={title}>
       <Link to="create">

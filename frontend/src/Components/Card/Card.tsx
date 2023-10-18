@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface Note {
   id: string;
@@ -19,9 +21,17 @@ const Card: React.FC<CardProps> = ({ note }) => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleNoteDelete = (id: string) => {
+  const handleNoteDelete = async (id: string) => {
     if (window.confirm("Are you sure")) {
-      console.log("deleting id ", id);
+      try {
+        const response = await axios.delete(
+          `${import.meta.env.VITE_BACKEND_LINK}/notes/${id}`
+        );
+        console.log("deleted note", response.data);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error deleting note:", error);
+      }
     }
   };
 
@@ -32,12 +42,12 @@ const Card: React.FC<CardProps> = ({ note }) => {
           {note.title}
         </span>
         <div>
-          <a href={`/note/${note.id}`}>
+          <Link to={`${note.id}`}>
             <Button
               title="Edit"
               customClass="px-2 py-1 mx-1 hover:bg-blue-700"
             />
-          </a>
+          </Link>
           <Button
             title="Delete"
             customClass="px-2 py-1 mx-1 bg-red-500 hover:bg-red-700"

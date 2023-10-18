@@ -15,8 +15,8 @@ const InputBox: React.FC<InputBoxProps> = ({ text, value, handleChange }) => {
     type = "password";
   }
 
-  if (text == "email") {
-    type == "email";
+  if (text === "email") {
+    type = "email";
   }
 
   return (

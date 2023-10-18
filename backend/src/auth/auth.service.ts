@@ -23,6 +23,7 @@ export class AuthService {
           hash,
           firstName: dto.firstName,
           lastName: dto.lastName,
+          picture: dto.picture,
         },
       });
 
