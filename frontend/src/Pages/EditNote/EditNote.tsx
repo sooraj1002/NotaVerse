@@ -123,7 +123,10 @@ const EditNote = () => {
             </div>
 
             <div className="md:col-span-5 text-right">
-              <div className="inline-flex items-end">
+              <div className="flex justify-between items-center">
+                <p className="text-bold text-xl text-blue-500 hover:underline">
+                  <a href="/mynotes">Go back to all notes</a>
+                </p>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   Submit
                 </button>

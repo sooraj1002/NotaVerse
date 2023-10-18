@@ -27,8 +27,8 @@ export class NotesController {
   }
 
   @Get(':id')
-  singleNote(@Param('id') id: string) {
-    return this.notesService.singleNote(id);
+  singleNote(@Param('id') id: string, @GetUser() user: User) {
+    return this.notesService.singleNote(id, user.id);
   }
 
   @Post()
@@ -38,12 +38,16 @@ export class NotesController {
   }
 
   @Put(':id')
-  editNote(@Param('id') id: string, @Body() updatedData: updateDto) {
-    return this.notesService.editNote(id, updatedData);
+  editNote(
+    @Param('id') id: string,
+    @Body() updatedData: updateDto,
+    @GetUser() user: User,
+  ) {
+    return this.notesService.editNote(id, updatedData, user.id);
   }
 
   @Delete(':id')
   deleteNote(@Param('id') id: string, @GetUser() user: User) {
-    return this.notesService.deleteNote(id);
+    return this.notesService.deleteNote(id, user.id);
   }
 }

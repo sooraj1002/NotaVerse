@@ -22,10 +22,17 @@ const Card: React.FC<CardProps> = ({ note }) => {
   };
 
   const handleNoteDelete = async (id: string) => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    };
     if (window.confirm("Are you sure")) {
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_BACKEND_LINK}/notes/${id}`
+          `${import.meta.env.VITE_BACKEND_LINK}/notes/${id}`,
+          {
+            headers: headers,
+          }
         );
         console.log("deleted note", response.data);
         window.location.reload();
@@ -36,9 +43,9 @@ const Card: React.FC<CardProps> = ({ note }) => {
   };
 
   return (
-    <div className="block rounded-lg bg-gray-300 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] my-5">
+    <div className="block rounded-lg bg-gray-200  my-5">
       <div className="flex justify-between border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 text-black text-2xl">
-        <span className="cursor-pointer text-4xl" onClick={toggleCollapse}>
+        <span className="cursor-pointer text-3xl" onClick={toggleCollapse}>
           {note.title}
         </span>
         <div>

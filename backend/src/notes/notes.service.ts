@@ -28,13 +28,16 @@ export class NotesService {
     }
   }
 
-  async singleNote(id: string) {
+  async singleNote(id: string, userId: number) {
     try {
       const note = await this.prisma.note.findUnique({
         where: {
           id: parseInt(id),
         },
       });
+      if (note.id != userId) {
+        throw new ForbiddenException('You Cannot Access this note');
+      }
       return note;
     } catch (error) {
       if (
@@ -69,8 +72,18 @@ export class NotesService {
     }
   }
 
-  async editNote(id: string, updatedData: updateDto) {
+  async editNote(id: string, updatedData: updateDto, userId: number) {
     try {
+      const check_note = await this.prisma.note.findUnique({
+        where: {
+          id: parseInt(id),
+        },
+      });
+
+      if (check_note.userId !== userId) {
+        throw new ForbiddenException('You are not allowed to edit this note');
+      }
+
       const note = await this.prisma.note.update({
         where: {
           id: parseInt(id),
@@ -89,7 +102,17 @@ export class NotesService {
     }
   }
 
-  async deleteNote(id: string) {
+  async deleteNote(id: string, userId: number) {
+    const check_note = await this.prisma.note.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (check_note.userId !== userId) {
+      throw new ForbiddenException('You are not allowed to delete this note');
+    }
+
     try {
       const deletedNote = await this.prisma.note.delete({
         where: {

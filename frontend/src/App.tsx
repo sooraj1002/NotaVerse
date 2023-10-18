@@ -7,17 +7,19 @@ import Signup from "./Pages/Signup/Signup";
 import Navbar from "./Components/Navbar/Navbar";
 import CreateNote from "./Pages/CreateNote/CreateNote";
 import EditNote from "./Pages/EditNote/EditNote";
+import { useState } from "react";
 
 export default function App() {
+  const [search, setSearch] = useState<string>("");
   return (
     <>
-      <Navbar />
+      <Navbar setSearch={setSearch} />
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/mynotes" element={<MyNotes />} />
+          <Route path="/mynotes" element={<MyNotes search={search} />} />
           <Route path="/mynotes/create" element={<CreateNote />} />
           <Route path="/mynotes/:noteId" element={<EditNote />} />
         </Routes>

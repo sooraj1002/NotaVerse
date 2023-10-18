@@ -12,7 +12,11 @@ interface Note {
   category: string;
 }
 
-const MyNotes = () => {
+interface MyNotesProps {
+  search: string;
+}
+
+const MyNotes: React.FC<MyNotesProps> = ({ search }) => {
   const [notes, setNotes] = useState<Note[]>([]);
   const { user, expired } = useAuth();
 
@@ -42,7 +46,7 @@ const MyNotes = () => {
     fetchNotes();
   }, []);
 
-  const title = `Welcome back ${user?.name}`;
+  const title = `Welcome Back ${user?.name}`;
   return (
     <PageTemplate title={title}>
       <Link to="create">
@@ -50,7 +54,14 @@ const MyNotes = () => {
           Create New Note
         </button>
       </Link>
-      {notes && notes.map((note) => <Card note={note} key={note.id} />)}
+      {notes &&
+        notes
+          .filter((filteredNote) => {
+            return filteredNote.title
+              .toLowerCase()
+              .includes(search.toLowerCase());
+          })
+          .map((note) => <Card note={note} key={note.id} />)}
     </PageTemplate>
   );
 };

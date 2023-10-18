@@ -2,6 +2,7 @@ import { useState } from "react";
 import PageTemplate from "../../Components/PageTemplate/PageTemplate";
 import axios from "axios";
 import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface Note {
   title: string;
@@ -17,6 +18,7 @@ const CreateNote = () => {
   });
 
   const { expired } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = (name: string, value: string) => {
     setNoteData((prevNoteData) => ({
@@ -27,7 +29,12 @@ const CreateNote = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await sendrequest();
+    try {
+      await sendrequest();
+      navigate("/mynotes");
+    } catch (error) {
+      console.log("error creating note", error);
+    }
   };
 
   const sendrequest = async () => {
@@ -92,7 +99,10 @@ const CreateNote = () => {
             </div>
 
             <div className="md:col-span-5 text-right">
-              <div className="inline-flex items-end">
+              <div className="flex justify-between items-center">
+                <p className="text-bold text-xl text-blue-500 hover:underline">
+                  <a href="/mynotes">Go back to all notes</a>
+                </p>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   Submit
                 </button>

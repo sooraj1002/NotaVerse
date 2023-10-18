@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  setSearch: (search: string) => void;
+}
+const Navbar: React.FC<NavbarProps> = ({ setSearch }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { user, expired, logout } = useAuth();
 
@@ -38,6 +41,7 @@ const Navbar: React.FC = () => {
                 name="search"
                 id="search"
                 placeholder="Search..."
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
             <ul className="flex items-center space-x-6">
