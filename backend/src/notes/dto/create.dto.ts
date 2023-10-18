@@ -12,8 +12,4 @@ export class createDto {
   @IsNotEmpty()
   @IsString()
   category: string;
-
-  @IsNotEmpty()
-  @IsString()
-  userId: string;
 }

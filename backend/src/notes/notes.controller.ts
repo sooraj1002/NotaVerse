@@ -27,21 +27,18 @@ export class NotesController {
   }
 
   @Get(':id')
-  singleNote(@Param('id') id: string, @GetUser() user: User) {
+  singleNote(@Param('id') id: string) {
     return this.notesService.singleNote(id);
   }
 
   @Post()
   createNote(@Body() data: createDto, @GetUser() user: User) {
-    return this.notesService.createNote(data);
+    const userId = user.id;
+    return this.notesService.createNote(data, userId);
   }
 
   @Put(':id')
-  editNote(
-    @Param('id') id: string,
-    @Body() updatedData: updateDto,
-    @GetUser() user: User,
-  ) {
+  editNote(@Param('id') id: string, @Body() updatedData: updateDto) {
     return this.notesService.editNote(id, updatedData);
   }
 

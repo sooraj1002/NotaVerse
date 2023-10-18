@@ -47,11 +47,11 @@ export class NotesService {
     }
   }
 
-  async createNote(data: createDto) {
+  async createNote(data: createDto, userId: number) {
     try {
       const convertedData = {
         ...data,
-        userId: parseInt(data.userId),
+        userId: userId,
       };
 
       const note = await this.prisma.note.create({
