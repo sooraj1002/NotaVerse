@@ -5,6 +5,8 @@ import MyNotes from "./Pages/MyNotes/MyNotes";
 import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/Signup";
 import Navbar from "./Components/Navbar/Navbar";
+import CreateNote from "./Pages/CreateNote/CreateNote";
+import EditNote from "./Pages/EditNote/EditNote";
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/mynotes" element={<MyNotes />} />
+          <Route path="/mynotes/create" element={<CreateNote />} />
+          <Route path="/mynotes/:noteId" element={<EditNote />} />
         </Routes>
       </Router>
       <Footer />

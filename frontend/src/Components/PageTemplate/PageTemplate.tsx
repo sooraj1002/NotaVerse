@@ -8,7 +8,7 @@ interface PageTemplateProps {
 const PageTemplate: React.FC<PageTemplateProps> = ({ title, children }) => {
   return (
     <>
-      <div className="flex flex-col min-h-screen px-12">
+      <div className="flex flex-col h-auto px-12">
         {title && (
           <>
             <h1 className="text-xl md:text-5xl py-4 font-work-sans px-8">
