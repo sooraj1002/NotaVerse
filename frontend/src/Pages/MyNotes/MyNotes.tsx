@@ -14,11 +14,21 @@ interface Note {
 
 const MyNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const { user, expired, getToken } = useAuth();
 
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_LINK}/notes`
+        `${import.meta.env.VITE_BACKEND_LINK}/notes`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+          data: {
+            userId: user?.sub,
+          },
+        }
       );
       setNotes(response.data);
       console.log(response.data);
@@ -28,7 +38,6 @@ const MyNotes = () => {
   };
 
   const navigate = useNavigate();
-  const { user, expired } = useAuth();
 
   useEffect(() => {
     console.log(expired());
@@ -37,7 +46,6 @@ const MyNotes = () => {
     if (expired() || !user) {
       navigate("/login");
     }
-
     fetchNotes();
   }, []);
 

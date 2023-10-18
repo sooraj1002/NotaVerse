@@ -13,6 +13,7 @@ interface User {
   email: string;
   name: string;
   exp: number;
+  id: number;
 }
 
 interface AuthContextType {
@@ -20,6 +21,7 @@ interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   expired: () => boolean;
+  getToken: () => string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,11 +40,12 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [jwtToken, setJwtToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const decodedUser = decodeToken(token);
+    setJwtToken(localStorage.getItem("accessToken"));
+    if (jwtToken) {
+      const decodedUser = decodeToken(jwtToken);
       if (decodedUser) {
         setUser(decodedUser);
       }
@@ -83,11 +86,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  function getToken() {
+    if (jwtToken) return jwtToken;
+    else return "";
+  }
+
   const value: AuthContextType = {
     user,
     login,
     logout,
     expired,
+    getToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

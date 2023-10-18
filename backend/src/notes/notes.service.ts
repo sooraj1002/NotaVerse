@@ -8,9 +8,14 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 export class NotesService {
   constructor(private prisma: PrismaService) {}
 
-  async allNotes() {
+  async allNotes(userId: number) {
+    console.log(userId);
     try {
-      const notes = await this.prisma.note.findMany();
+      const notes = await this.prisma.note.findMany({
+        where: {
+          userId: userId,
+        },
+      });
       return notes;
     } catch (error) {
       if (
