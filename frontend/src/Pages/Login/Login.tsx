@@ -19,7 +19,7 @@ const Login = () => {
   const { user, login, expired } = useAuth();
 
   useEffect(() => {
-    if (user && !expired()) {
+    if (!expired()) {
       navigate("/mynotes");
     }
   }, [user, expired]);
@@ -33,7 +33,6 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(userData);
 
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(userData.email)) {

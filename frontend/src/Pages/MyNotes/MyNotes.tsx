@@ -14,36 +14,29 @@ interface Note {
 
 const MyNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const { user, expired, getToken } = useAuth();
+  const { user, expired } = useAuth();
 
   const fetchNotes = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_LINK}/notes`,
-        {
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            "Content-Type": "application/json",
-          },
-          data: {
-            userId: user?.sub,
-          },
-        }
-      );
-      setNotes(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
+    if (!expired())
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_LINK}/notes`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        setNotes(response.data);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
   };
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(expired());
-    console.log(user);
-
-    if (expired() || !user) {
+    if (expired()) {
       navigate("/login");
     }
     fetchNotes();
@@ -57,9 +50,7 @@ const MyNotes = () => {
           Create New Note
         </button>
       </Link>
-      {notes.map((note) => (
-        <Card note={note} key={note.id} />
-      ))}
+      {notes && notes.map((note) => <Card note={note} key={note.id} />)}
     </PageTemplate>
   );
 };

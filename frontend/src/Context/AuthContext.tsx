@@ -40,12 +40,11 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  const [jwtToken, setJwtToken] = useState<string | null>(null);
 
   useEffect(() => {
-    setJwtToken(localStorage.getItem("accessToken"));
-    if (jwtToken) {
-      const decodedUser = decodeToken(jwtToken);
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decodedUser = decodeToken(token);
       if (decodedUser) {
         setUser(decodedUser);
       }
@@ -75,20 +74,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function expired() {
-    if (user) {
-      if (user.exp * 1000 > Date.now()) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return true;
+    if (user && user.exp) {
+      const currentTimestamp = Math.floor(Date.now() / 1000); // Convert milliseconds to seconds
+      return user.exp < currentTimestamp;
     }
+    return true; // If user is not defined or "exp" claim is missing, consider it as expired
   }
 
   function getToken() {
-    if (jwtToken) return jwtToken;
-    else return "";
+    const token = localStorage.getItem("accessToken");
+    return token || "";
   }
 
   const value: AuthContextType = {

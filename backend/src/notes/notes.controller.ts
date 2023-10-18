@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
@@ -17,36 +16,37 @@ import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 
 @Controller('notes')
+@UseGuards(JwtGuard)
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
-  @UseGuards(JwtGuard)
   @Get()
   allNotes(@GetUser() user: User) {
+    console.log(user);
     return this.notesService.allNotes(user.id);
   }
 
-  @UseGuards(JwtGuard)
   @Get(':id')
-  singleNote(@Param('id') id: string) {
+  singleNote(@Param('id') id: string, @GetUser() user: User) {
     return this.notesService.singleNote(id);
   }
 
-  @UseGuards(JwtGuard)
   @Post()
-  createNote(@Body() data: createDto) {
+  createNote(@Body() data: createDto, @GetUser() user: User) {
     return this.notesService.createNote(data);
   }
 
-  @UseGuards(JwtGuard)
   @Put(':id')
-  editNote(@Param('id') id: string, @Body() updatedData: updateDto) {
+  editNote(
+    @Param('id') id: string,
+    @Body() updatedData: updateDto,
+    @GetUser() user: User,
+  ) {
     return this.notesService.editNote(id, updatedData);
   }
 
-  @UseGuards(JwtGuard)
   @Delete(':id')
-  deleteNote(@Param('id') id: string) {
+  deleteNote(@Param('id') id: string, @GetUser() user: User) {
     return this.notesService.deleteNote(id);
   }
 }
